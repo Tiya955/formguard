@@ -10,7 +10,7 @@ import WearGuidePage from './pages/WearGuidePage';
 import CalibrationPage from './pages/CalibrationPage';
 import WorkoutPage from './pages/WorkoutPage';
 import HistoryPage from './pages/HistoryPage';
-
+import { getWorkouts, deleteWorkout, clearWorkouts } from "./services/workoutStorage";
 import { INITIAL_USER } from './data/mockData'; // demo sessions are no longer imported
 import { hardwareManager } from './services/bleService';
 
@@ -34,12 +34,7 @@ export default function App() {
   });
 
   // Workout History State: starts EMPTY, only contains workouts the user saved
-  const [sessions, setSessions] = useState(() => {
-    try {
-      const saved = localStorage.getItem('formguard_sessions');
-      return saved ? JSON.parse(saved) : [];
-    } catch { return []; }
-  });
+  const [sessions, setSessions] = useState(() => getWorkouts());
 
   const [calibratedBaseline, setCalibratedBaseline] = useState(null);
 
@@ -77,9 +72,10 @@ export default function App() {
     setSessions((prev) => [newSession, ...prev]);
   };
 
-  const handleDeleteSession = (sessionId) => {
-    setSessions((prev) => prev.filter((s) => s.id !== sessionId));
-  };
+  const handleDeleteSession = (id) => {
+  deleteWorkout(id);
+  setSessions(prev => prev.filter(s => s.id !== id));
+};
 
   const handleClearAll = () => {
     setSessions([]);

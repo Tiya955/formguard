@@ -4,6 +4,7 @@ import confetti from 'canvas-confetti';
 import { hardwareManager } from '../services/bleService';
 import OledSimulator from '../components/OledSimulator';
 import { Line } from 'react-chartjs-2';
+import { saveWorkout } from "../services/workoutStorage";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -150,6 +151,7 @@ export default function WorkoutPage({ hardwareStatus, onSaveSession, setActiveTa
       avgFatigue: liveFatigue,
       notes: notes.trim(),
     };
+    saveWorkout(summary); 
     onSaveSession(summary);
     resetMetrics();
     setIsSummaryOpen(false);
